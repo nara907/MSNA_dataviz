@@ -46,23 +46,26 @@ dataFILE2<-dataFILE1 %>%
   select(-n)
   # spread(var,  perc)
 
-ggplot(data = dataFILE2, mapping = aes(x = governorate_name,
-                                                   y = reorder(variable,value),
-                                                   fill = value)) + 
-  geom_tile() +
-  ylab(label="")+
-  xlab(label = "")+
-  scale_fill_gradient(name = "value",
-                      low = "#FCDEDE",
-                      high = "#EE5859")+
-  geom_text(aes(x = governorate_name,
-                y = variable,label=paste0(value, "%") ),
-            family = "Arial Narrow",
-            size=2.5)+
-  scale_x_discrete(position = "top")+
-  theme_tufte() +
-  theme(text = element_text(family = "Arial Narrow", size=10),legend.position="none")
-  #ggsave("G9_heatmap.png", width=8,height=0.8+0.6*nrow(OandV_t), dpi=300, units="cm")
+reach_heat_map <- function(grouped_data,aggregated_by){
+  ggplot(data = grouped_data, mapping = aes(x = aggregated_by,
+                                         y = reorder(variable,value),
+                                         fill = value)) + 
+    geom_tile() +
+    ylab(label="")+
+    xlab(label = "")+
+    scale_fill_gradient(name = "value",
+                        low = "#FCDEDE",
+                        high = "#EE5859")+
+    geom_text(aes(x = aggregated_by,
+                  y = variable,label=paste0(value, "%") ),
+              family = "Arial Narrow",
+              size=2.5)+
+    scale_x_discrete(position = "top")+
+    theme_tufte() +
+    theme(text = element_text(family = "Arial Narrow", size=10),legend.position="none")
+}
+
+wash_heat_map_by_governorate <- reach_heat_map(dataFILE2,governorate_name)
 
 heatmap1
 
