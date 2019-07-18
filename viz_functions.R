@@ -38,6 +38,20 @@ cols <- c("#F05954",  "#57585A", "#D3CCB9",  "#F8AA9A", "#D1D2D4",
 
 dataFILE1<-dataFILE[,c("governorate_name", "district_name", "type_area", "wash_prices")]
 
+format_data_heatmap<- function(dataOI, disagg, questionV){
+  dataOI %>% 
+  group_by(disagg)%>%
+  select(variable= questionV) %>%
+  dplyr::count(variable)%>%
+  mutate(value = round(100*(n / sum(n)),1))%>%
+  select(-n)
+}
+two_way<-as.data.frame(table(subset(dataFILE1,select=c("type_area","wash_prices"))))
+two_way2<-spread(two_way, wash_prices, Freq)
+two_way2$n<- sum(two_way2$no)
+
+format_data_heatmap(dataFILE1, "governorate_name", "wash_prices")
+
 dataFILE2<-dataFILE1 %>% 
   group_by(governorate_name)%>%
   select(variable= wash_prices) %>%
